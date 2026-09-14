@@ -10,6 +10,38 @@ type PreviewPaneProps = {
 
 const emptyPreviewHtml = '<div class="neo-preview-empty">这里空空如也，请在左侧输入内容</div>';
 
+function ArticleHtml({ outputHtml }: { outputHtml: string }) {
+  return (
+    <div
+      className="w-full prose-img:max-w-full"
+      dangerouslySetInnerHTML={{ __html: outputHtml || emptyPreviewHtml }}
+    />
+  );
+}
+
+function DesktopPhonePreview({ outputHtml }: { outputHtml: string }) {
+  return (
+    <div className="neo-phone-shell h-fit min-h-[667px] w-full max-w-[375px] shrink-0 relative transition-all duration-300 transform origin-top hover:scale-[1.02] p-1.5">
+      <div className="absolute top-0 inset-x-0 h-7 flex justify-between items-center px-6 z-10 pointer-events-none">
+        <div className="text-[10px] font-medium text-(--neo-muted)">9:41</div>
+        <div className="neo-phone-notch w-24 h-5 rounded-b-xl absolute left-1/2 -translate-x-1/2" />
+        <div className="flex gap-1">
+          <div className="neo-phone-notch w-3 h-2 rounded-sm" />
+          <div className="neo-phone-notch w-3 h-2 rounded-sm" />
+        </div>
+      </div>
+      <div className="neo-phone-status-strip pt-10 pb-2 px-4 text-center rounded-t-4xl">
+        <div className="text-sm font-bold text-(--neo-ink) truncate">文章预览</div>
+      </div>
+      <div className="neo-phone-screen-area w-full rounded-b-4xl overflow-hidden flex flex-col pt-2 pb-6">
+        <div className="flex-1 overflow-visible">
+          <ArticleHtml outputHtml={outputHtml} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function PreviewPane({
   activeTab,
   previewRef,
@@ -22,29 +54,12 @@ export function PreviewPane({
       onScroll={onPreviewScroll}
       className={`flex-[1.2] flex-col overflow-y-auto ${activeTab === "preview" ? "flex" : "hidden md:flex"} custom-scrollbar`}
     >
-      <div className="flex-1 neo-panel-strong flex justify-center py-6 px-4 md:py-8">
-        <div className="neo-phone-shell h-fit min-h-[667px] w-full max-w-[375px] shrink-0 relative transition-all duration-300 transform origin-top hover:scale-[1.02] p-1.5">
-          <div className="absolute top-0 inset-x-0 h-7 flex justify-between items-center px-6 z-10 pointer-events-none">
-            <div className="text-[10px] font-medium text-(--neo-muted)">9:41</div>
-            <div className="neo-phone-notch w-24 h-5 rounded-b-xl absolute left-1/2 -translate-x-1/2" />
-            <div className="flex gap-1">
-              <div className="neo-phone-notch w-3 h-2 rounded-sm" />
-              <div className="neo-phone-notch w-3 h-2 rounded-sm" />
-            </div>
-          </div>
-          <div className="neo-phone-status-strip pt-10 pb-2 px-4 text-center rounded-t-4xl">
-            <div className="text-sm font-bold text-(--neo-ink) truncate">文章预览</div>
-          </div>
-          <div className="neo-phone-screen-area w-full rounded-b-4xl overflow-hidden flex flex-col pt-2 pb-6">
-            <div className="flex-1 overflow-visible">
-              <div
-                className="w-full prose-img:max-w-full"
-                dangerouslySetInnerHTML={{
-                  __html: outputHtml || emptyPreviewHtml,
-                }}
-              />
-            </div>
-          </div>
+      <div className="md:flex-1 neo-panel-strong flex justify-center py-6 px-4 md:py-8">
+        <div className="md:hidden w-full">
+          <ArticleHtml outputHtml={outputHtml} />
+        </div>
+        <div className="hidden md:block">
+          <DesktopPhonePreview outputHtml={outputHtml} />
         </div>
       </div>
     </div>

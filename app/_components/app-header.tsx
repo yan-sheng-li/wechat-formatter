@@ -1,5 +1,6 @@
-import { CircleDollarSign, Copy, Moon, Send, Star, Sun } from "lucide-react";
+import { CircleDollarSign, Copy, Moon, MoreVertical, Send, Star, Sun } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import type React from "react";
 import type { ActiveTab } from "../_types/formatter";
 
@@ -24,6 +25,22 @@ export function AppHeader({
   activeTab,
   setActiveTab,
 }: AppHeaderProps) {
+  const [showMoreMenu, setShowMoreMenu] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showMoreMenu) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setShowMoreMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showMoreMenu]);
+
   return (
     <header className="bg-(--neo-app-header) border-b-[3px] border-(--neo-ink) sticky top-0 z-20">
       <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
@@ -88,6 +105,51 @@ export function AppHeader({
               <span className="md:hidden">复制</span>
               <span className="hidden md:inline">一键复制</span>
             </button>
+            <div ref={moreMenuRef} className="relative sm:hidden shrink-0">
+              <button
+                type="button"
+                onClick={() => setShowMoreMenu((prev) => !prev)}
+                className="neo-button neo-button-ghost p-2 h-10 flex items-center justify-center"
+                title="更多操作"
+                aria-expanded={showMoreMenu}
+              >
+                <MoreVertical className="w-5 h-5" />
+              </button>
+              {showMoreMenu && (
+                <div className="absolute right-0 top-12 z-30 w-52 neo-modal p-2 space-y-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toggleDarkMode();
+                      setShowMoreMenu(false);
+                    }}
+                    className="w-full flex items-center justify-between px-3 py-2 text-sm font-black text-(--neo-ink) hover:bg-(--neo-yellow)"
+                  >
+                    {isDarkMode ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+                    <span>{isDarkMode ? "亮色模式" : "暗黑模式"}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onShowReward();
+                      setShowMoreMenu(false);
+                    }}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-black text-(--neo-ink) hover:bg-(--neo-pink)/20"
+                  >
+                    <CircleDollarSign className="w-4 h-4" /> 赞赏支持
+                  </button>
+                  <a
+                    href="https://github.com/mspringjade/wechat-formatter"
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    onClick={() => setShowMoreMenu(false)}
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm font-black text-(--neo-ink) hover:bg-(--neo-cyan)/20"
+                  >
+                    <Star className="w-4 h-4" /> GitHub Star
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

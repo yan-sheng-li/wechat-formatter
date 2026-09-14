@@ -16,7 +16,9 @@ import {
   Superscript,
   Table,
 } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import type React from "react";
+import { MoreVertical } from "lucide-react";
 import type { ActiveTab, WordCount } from "../_types/formatter";
 
 type MarkdownEditorPaneProps = {
@@ -66,6 +68,22 @@ export function MarkdownEditorPane({
   onOpenAiConfig,
   onRestoreSample,
 }: MarkdownEditorPaneProps) {
+  const [showAdvancedTools, setShowAdvancedTools] = useState(false);
+  const advancedToolsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!showAdvancedTools) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (advancedToolsRef.current && !advancedToolsRef.current.contains(event.target as Node)) {
+        setShowAdvancedTools(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showAdvancedTools]);
+
   return (
     <div
       className={`flex-[1.2] flex-col neo-panel overflow-hidden ${activeTab === "input" ? "flex" : "hidden md:flex"}`}
@@ -108,6 +126,80 @@ export function MarkdownEditorPane({
       </div>
 
       <div className="bg-(--neo-surface) px-3 py-2 border-b-[3px] border-(--neo-ink) flex flex-wrap items-center gap-x-2 gap-y-2 shrink-0 overflow-x-auto custom-scrollbar no-scrollbar">
+        <div className="flex items-center gap-1 md:hidden">
+          <button
+            onClick={() => insertHeading(1)}
+            className="neo-toolbar-button p-2 text-sm font-bold"
+            title="一级标题"
+          >
+            H1
+          </button>
+          <button
+            onClick={() => insertHeading(2)}
+            className="neo-toolbar-button p-2 text-sm font-bold"
+            title="二级标题"
+          >
+            H2
+          </button>
+          <button
+            onClick={() => insertMarkdown("**", "**", "加粗")}
+            className="neo-toolbar-button p-2 font-bold"
+            title="加粗"
+          >
+            B
+          </button>
+          <button
+            onClick={() => insertList("ul")}
+            className="neo-toolbar-button p-2"
+            title="列表"
+          >
+            <List className="w-4 h-4" />
+          </button>
+          <button
+            onClick={insertImage}
+            className="neo-toolbar-button p-2"
+            title="图片"
+          >
+            <ImageIcon className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => insertMarkdown("> ", "", "引用内容")}
+            className="neo-toolbar-button p-2"
+            title="引用"
+          >
+            <Quote className="w-4 h-4" />
+          </button>
+          <div ref={advancedToolsRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setShowAdvancedTools((prev) => !prev)}
+              className="neo-toolbar-button p-2"
+              title="更多工具"
+              aria-expanded={showAdvancedTools}
+            >
+              <MoreVertical className="w-4 h-4" />
+            </button>
+            {showAdvancedTools && (
+              <div className="absolute right-0 top-10 z-30 w-56 neo-modal p-2 grid grid-cols-2 gap-1">
+                <button type="button" onClick={() => { insertHeading(3); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 text-xs">H3</button>
+                <button type="button" onClick={() => { insertMarkdown("*", "*", "斜体"); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 italic font-serif">I</button>
+                <button type="button" onClick={() => { insertMarkdown("~~", "~~", "删除线"); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 line-through">S</button>
+                <button type="button" onClick={() => { insertHighlight(); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2 text-yellow-600"><Highlighter className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertList("ol"); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><ListOrdered className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertList("tl"); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><CheckSquare className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertLink(); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><LinkIcon className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertTable(); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><Table className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertMarkdown("---\n", "", ""); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><Minus className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertMarkdown("`", "`", "代码"); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 font-mono text-xs">{"</>"}</button>
+                <button type="button" onClick={() => { insertCodeBlock(); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><Code2 className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertSuperscript(); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><Superscript className="w-4 h-4" /></button>
+                <button type="button" onClick={() => { insertSubscript(); setShowAdvancedTools(false); }} className="neo-toolbar-button p-2"><Subscript className="w-4 h-4" /></button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div className="hidden md:flex md:flex-wrap md:w-full md:items-center md:gap-x-2 md:gap-y-2">
         {/* Style Group */}
         <div className="flex items-center gap-1">
           <button
@@ -238,6 +330,7 @@ export function MarkdownEditorPane({
           <button onClick={insertSubscript} className="neo-toolbar-button p-1.5" title="下标">
             <Subscript className="w-4 h-4" />
           </button>
+        </div>
         </div>
       </div>
 
