@@ -45,3 +45,4 @@ next-env.d.ts
 .agents/
 .trae/
 skills-lock.json
+/.codegraph
