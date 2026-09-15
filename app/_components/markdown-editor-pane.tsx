@@ -122,6 +122,18 @@ export function MarkdownEditorPane({
             <span className="hidden max-[340px]:inline">恢复示例</span>
             <span className="inline max-[340px]:hidden">恢复示例内容</span>
           </button>
+          <button
+            onClick={() => {
+              if (!window.confirm("确定清空编辑区全部内容？清空后无法恢复。")) return;
+              setInputText("");
+              inputRef.current?.focus();
+            }}
+            className="neo-button neo-button-secondary text-xs px-2 sm:px-2.5 py-1 whitespace-nowrap shrink-0"
+            title="清空编辑区全部内容"
+            disabled={!inputText.trim()}
+          >
+            清空
+          </button>
         </div>
       </div>
 
