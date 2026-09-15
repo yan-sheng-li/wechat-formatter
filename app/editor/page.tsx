@@ -1,8 +1,6 @@
 "use client";
 
-import { track } from "@vercel/analytics";
 import { useMemo, useRef, useState } from "react";
-import { AiConfigModal } from "../_components/ai-config-modal";
 import { AppFooter } from "../_components/app-footer";
 import { AppHeader } from "../_components/app-header";
 import { ImageInsertModal } from "../_components/image-insert-modal";
@@ -11,16 +9,12 @@ import { PreviewPane } from "../_components/preview-pane";
 import { RewardModal } from "../_components/reward-modal";
 import { SettingsPane } from "../_components/settings-pane";
 import { Toast } from "../_components/toast";
-import { WeChatSyncModal } from "../_components/wechat-sync-modal";
-import { useAiFormat } from "../_hooks/use-ai-format";
-import { useAiSettings } from "../_hooks/use-ai-settings";
 import { useClipboardCopy } from "../_hooks/use-clipboard-copy";
 import { useMarkdownTools } from "../_hooks/use-markdown-tools";
 import { useDraft } from "../_hooks/use-draft";
 import { useScrollSync } from "../_hooks/use-scroll-sync";
 import { useTheme } from "../_hooks/use-theme";
 import { useToast } from "../_hooks/use-toast";
-import { useWeChatSettings } from "../_hooks/use-wechat-settings";
 import { useWordCount } from "../_hooks/use-word-count";
 import { sampleText } from "../_lib/formatter-constants";
 import type { ActiveTab, FormatTweaks } from "../_types/formatter";
@@ -51,7 +45,6 @@ export default function Home() {
   const [formatTweaks, setFormatTweaks] = useState<FormatTweaks>(DEFAULT_FORMAT_TWEAKS);
   const [showReward, setShowReward] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [showWeChatModal, setShowWeChatModal] = useState(false);
   const [imageMap, setImageMap] = useState<Map<string, string>>(new Map());
   const [imageUrl, setImageUrl] = useState("");
   const [imageDesc, setImageDesc] = useState("");
@@ -60,8 +53,6 @@ export default function Home() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageCounterRef = useRef(0);
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const aiSettings = useAiSettings(showToast);
-  const wechatSettings = useWeChatSettings();
   const wordCount = useWordCount(inputText);
   const copyToClipboard = useClipboardCopy(showToast);
   const { syncScroll, setSyncScroll, previewRef, handleInputScroll, handlePreviewScroll } =
@@ -86,17 +77,6 @@ export default function Home() {
     setShowImageModal,
   });
 
-  const { isAiFormatting, handleAiFormat } = useAiFormat({
-    inputText,
-    setInputText,
-    aiProviderType: aiSettings.aiProviderType,
-    aiBaseUrl: aiSettings.aiBaseUrl,
-    aiApiKey: aiSettings.aiApiKey,
-    aiModel: aiSettings.aiModel,
-    setShowAiConfigModal: aiSettings.setShowAiConfigModal,
-    showToast,
-  });
-
   const currentTemplate =
     allTemplates.find((template) => template.id === currentTemplateId) || allTemplates[0];
 
@@ -112,7 +92,6 @@ export default function Home() {
   }, [inputText, currentTemplate, formatTweaks, imageMap]);
 
   const handleCopy = () => {
-    track("copy_clicked");
     copyToClipboard(outputHtml);
   };
 
@@ -131,21 +110,6 @@ export default function Home() {
         onOnlineImage={markdownTools.handleOnlineImage}
       />
 
-      <AiConfigModal
-        open={aiSettings.showAiConfigModal}
-        aiProviderType={aiSettings.aiProviderType}
-        setAiProviderType={aiSettings.setAiProviderType}
-        aiBaseUrl={aiSettings.aiBaseUrl}
-        setAiBaseUrl={aiSettings.setAiBaseUrl}
-        aiApiKey={aiSettings.aiApiKey}
-        setAiApiKey={aiSettings.setAiApiKey}
-        aiModel={aiSettings.aiModel}
-        setAiModel={aiSettings.setAiModel}
-        onClose={() => aiSettings.setShowAiConfigModal(false)}
-        onSave={aiSettings.saveAiSettings}
-        onClear={aiSettings.clearAiSettings}
-      />
-
       <input
         ref={fileInputRef}
         type="file"
@@ -156,26 +120,11 @@ export default function Home() {
 
       <RewardModal open={showReward} onClose={() => setShowReward(false)} />
 
-      <WeChatSyncModal
-        open={showWeChatModal}
-        onClose={() => setShowWeChatModal(false)}
-        html={outputHtml}
-        markdown={inputText}
-        title={articleTitle}
-        config={wechatSettings.wechatConfig}
-        onSaveConfig={wechatSettings.updateConfig}
-        showToast={showToast}
-      />
-
       <div className="h-screen flex flex-col overflow-hidden shrink-0">
         <AppHeader
           isDarkMode={isDarkMode}
           toggleDarkMode={toggleDarkMode}
           onShowReward={() => setShowReward(true)}
-          onShowWeChatSync={() => {
-            track("publish_modal_opened");
-            setShowWeChatModal(true);
-          }}
           onCopy={handleCopy}
           hasContent={Boolean(inputText.trim())}
           activeTab={activeTab}
@@ -202,9 +151,6 @@ export default function Home() {
               insertCodeBlock={markdownTools.insertCodeBlock}
               insertLink={markdownTools.insertLink}
               insertImage={markdownTools.insertImage}
-              onAiFormat={handleAiFormat}
-              isAiFormatting={isAiFormatting}
-              onOpenAiConfig={() => aiSettings.setShowAiConfigModal(true)}
               onRestoreSample={() => setInputText(sampleText)}
             />
 

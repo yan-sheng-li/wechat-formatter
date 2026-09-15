@@ -1,4 +1,4 @@
-import { CircleDollarSign, Copy, Moon, MoreVertical, Send, Star, Sun } from "lucide-react";
+import { CircleDollarSign, Copy, Moon, MoreVertical, Star, Sun } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type React from "react";
@@ -8,7 +8,6 @@ type AppHeaderProps = {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
   onShowReward: () => void;
-  onShowWeChatSync: () => void;
   onCopy: () => void;
   hasContent: boolean;
   activeTab: ActiveTab;
@@ -19,7 +18,6 @@ export function AppHeader({
   isDarkMode,
   toggleDarkMode,
   onShowReward,
-  onShowWeChatSync,
   onCopy,
   hasContent,
   activeTab,
@@ -87,15 +85,6 @@ export function AppHeader({
               <Star className="w-4 h-4" />
               <span className="text-xs font-black hidden lg:inline">Star</span>
             </a>
-            <button
-              onClick={onShowWeChatSync}
-              className="neo-button bg-(--neo-green) text-white hover:brightness-110 px-3 py-2 sm:px-4 h-10 flex items-center gap-2 text-sm shrink-0"
-              disabled={!hasContent}
-            >
-              <Send className="w-4 h-4" />
-              <span className="lg:hidden">同步</span>
-              <span className="hidden lg:inline">同步公众号</span>
-            </button>
             <button
               onClick={onCopy}
               className="neo-button neo-button-primary px-3 py-2 sm:px-6 h-10 flex items-center gap-2 text-sm sm:text-base shrink-0"

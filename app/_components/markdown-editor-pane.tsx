@@ -7,11 +7,8 @@ import {
   Link as LinkIcon,
   List,
   ListOrdered,
-  Loader2,
   Minus,
   Quote,
-  Settings,
-  Sparkles,
   Subscript,
   Superscript,
   Table,
@@ -39,9 +36,6 @@ type MarkdownEditorPaneProps = {
   insertCodeBlock: () => void;
   insertLink: () => void;
   insertImage: () => void;
-  onAiFormat: () => void;
-  isAiFormatting: boolean;
-  onOpenAiConfig: () => void;
   onRestoreSample: () => void;
 };
 
@@ -63,9 +57,6 @@ export function MarkdownEditorPane({
   insertCodeBlock,
   insertLink,
   insertImage,
-  onAiFormat,
-  isAiFormatting,
-  onOpenAiConfig,
   onRestoreSample,
 }: MarkdownEditorPaneProps) {
   const [showAdvancedTools, setShowAdvancedTools] = useState(false);
@@ -94,26 +85,6 @@ export function MarkdownEditorPane({
           <span className="truncate">Markdown 输入</span>
         </span>
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 justify-end w-full sm:w-auto">
-          <button
-            onClick={onAiFormat}
-            className="neo-button neo-button-pink text-xs px-2.5 sm:px-3 py-1.5 flex items-center gap-1.5 whitespace-nowrap shrink-0"
-            disabled={!inputText.trim() || isAiFormatting}
-            title="使用 AI 一键优化当前 Markdown 排版结构"
-          >
-            {isAiFormatting ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin shrink-0" />
-            ) : (
-              <Sparkles className="w-3.5 h-3.5 shrink-0" />
-            )}
-            {isAiFormatting ? "AI 排版中..." : "AI 一键排版"}
-          </button>
-          <button
-            onClick={onOpenAiConfig}
-            className="neo-button neo-button-ghost p-1.5 shrink-0"
-            title="配置 AI 服务"
-          >
-            <Settings className="w-3.5 h-3.5" />
-          </button>
           <button
             onClick={onRestoreSample}
             className="neo-button neo-button-secondary text-xs px-2 sm:px-2.5 py-1 whitespace-nowrap shrink-0"
