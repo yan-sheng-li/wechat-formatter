@@ -45,13 +45,11 @@ export default function Home() {
   const [formatTweaks, setFormatTweaks] = useState<FormatTweaks>(DEFAULT_FORMAT_TWEAKS);
   const [showReward, setShowReward] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
-  const [imageMap, setImageMap] = useState<Map<string, string>>(new Map());
   const [imageUrl, setImageUrl] = useState("");
   const [imageDesc, setImageDesc] = useState("");
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const imageCounterRef = useRef(0);
   const { isDarkMode, toggleDarkMode } = useTheme();
   const wordCount = useWordCount(inputText);
   const copyToClipboard = useClipboardCopy(showToast);
@@ -68,28 +66,20 @@ export default function Home() {
     setInputText,
     inputRef,
     fileInputRef,
-    imageCounterRef,
-    setImageMap,
     imageUrl,
     imageDesc,
     setImageUrl,
     setImageDesc,
     setShowImageModal,
+    showToast,
   });
 
   const currentTemplate =
     allTemplates.find((template) => template.id === currentTemplateId) || allTemplates[0];
 
   const outputHtml = useMemo(() => {
-    if (!inputText.trim()) return "";
-
-    const processedText = inputText.replace(/!\[(.*?)\]\(#(img-\d+)\)/g, (match, alt, imageId) => {
-      const base64 = imageMap.get(imageId);
-      return base64 ? `![${alt}](${base64})` : match;
-    });
-
-    return renderArticle(processedText, currentTemplate, formatTweaks);
-  }, [inputText, currentTemplate, formatTweaks, imageMap]);
+    return inputText.trim() ? renderArticle(inputText, currentTemplate, formatTweaks) : "";
+  }, [inputText, currentTemplate, formatTweaks]);
 
   const handleCopy = () => {
     copyToClipboard(outputHtml);

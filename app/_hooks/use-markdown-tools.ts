@@ -1,18 +1,19 @@
 import { useCallback } from "react";
-import type React from "react";
+import React, { type ClipboardEvent } from "react";
+import { uploadImageFile } from "../_lib/image-upload";
+import type { ShowToast } from "./use-toast";
 
 type UseMarkdownToolsParams = {
   inputText: string;
   setInputText: React.Dispatch<React.SetStateAction<string>>;
   inputRef: React.RefObject<HTMLTextAreaElement | null>;
   fileInputRef: React.RefObject<HTMLInputElement | null>;
-  imageCounterRef: React.MutableRefObject<number>;
-  setImageMap: React.Dispatch<React.SetStateAction<Map<string, string>>>;
   imageUrl: string;
   imageDesc: string;
   setImageUrl: React.Dispatch<React.SetStateAction<string>>;
   setImageDesc: React.Dispatch<React.SetStateAction<string>>;
   setShowImageModal: React.Dispatch<React.SetStateAction<boolean>>;
+  showToast: ShowToast;
 };
 
 export function useMarkdownTools({
@@ -20,13 +21,12 @@ export function useMarkdownTools({
   setInputText,
   inputRef,
   fileInputRef,
-  imageCounterRef,
-  setImageMap,
   imageUrl,
   imageDesc,
   setImageUrl,
   setImageDesc,
   setShowImageModal,
+  showToast,
 }: UseMarkdownToolsParams) {
   const insertMarkdown = useCallback(
     (prefix: string, suffix: string = prefix, placeholder: string = "") => {
@@ -96,8 +96,7 @@ export function useMarkdownTools({
       else if (type === "tl") prefix = "- [ ] ";
 
       const textToInsert = selectedText || "列表项";
-      const newText =
-        inputText.substring(0, start) + prefix + textToInsert + inputText.substring(end);
+      const newText = inputText.substring(0, start) + prefix + textToInsert + inputText.substring(end);
 
       setInputText(newText);
 
@@ -125,7 +124,6 @@ export function useMarkdownTools({
     setTimeout(() => {
       textarea.focus();
       textarea.scrollTop = scrollTop;
-      // Select the first "标题"
       textarea.setSelectionRange(start + 3, start + 5);
     }, 0);
   }, [inputRef, inputText, setInputText]);
@@ -185,6 +183,42 @@ export function useMarkdownTools({
     }, 0);
   }, [inputRef, inputText, setInputText]);
 
+  const insertImageAtCursor = useCallback(
+    (imageMarkdown: string) => {
+      const textarea = inputRef.current;
+      if (!textarea) return;
+
+      const scrollTop = textarea.scrollTop;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+      const newText = inputText.substring(0, start) + imageMarkdown + inputText.substring(end);
+
+      setInputText(newText);
+
+      setTimeout(() => {
+        textarea.focus();
+        textarea.scrollTop = scrollTop;
+        textarea.setSelectionRange(start + imageMarkdown.length, start + imageMarkdown.length);
+      }, 0);
+    },
+    [inputRef, inputText, setInputText],
+  );
+
+  const uploadAndInsertImage = useCallback(
+    async (file: File, desc = "图片") => {
+      try {
+        const imageUrl = await uploadImageFile(file);
+        insertImageAtCursor(`![${desc}](${imageUrl})`);
+        showToast("图片已上传并插入", "success");
+        return true;
+      } catch (error) {
+        showToast(error instanceof Error ? error.message : "图片上传失败，请稍后重试", "error");
+        return false;
+      }
+    },
+    [insertImageAtCursor, showToast],
+  );
+
   const insertImage = useCallback(() => {
     setImageUrl("");
     setImageDesc("");
@@ -196,78 +230,28 @@ export function useMarkdownTools({
   }, [fileInputRef]);
 
   const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
+      e.target.value = "";
       if (!file) return;
 
-      const textarea = inputRef.current;
-      const scrollTop = textarea?.scrollTop ?? 0;
-      const start = textarea?.selectionStart ?? 0;
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64 = event.target?.result as string;
-        const imageId = `img-${++imageCounterRef.current}`;
-        const desc = imageDesc || "图片";
-
-        setImageMap((prev) => {
-          const newMap = new Map(prev);
-          newMap.set(imageId, base64);
-          return newMap;
-        });
-
-        const currentTextarea = inputRef.current;
-        if (currentTextarea) {
-          const currentEnd = currentTextarea.selectionEnd ?? start;
-          const imageMarkdown = `![${desc}](#${imageId})`;
-          const newText =
-            inputText.substring(0, start) + imageMarkdown + inputText.substring(currentEnd);
-
-          setInputText(newText);
-
-          setTimeout(() => {
-            currentTextarea.focus();
-            currentTextarea.scrollTop = scrollTop;
-            currentTextarea.setSelectionRange(
-              start + imageMarkdown.length,
-              start + imageMarkdown.length,
-            );
-          }, 0);
-        }
-
-        setShowImageModal(false);
-      };
-      reader.readAsDataURL(file);
+      await uploadAndInsertImage(file, imageDesc || "图片");
+      setShowImageModal(false);
     },
-    [imageCounterRef, imageDesc, inputRef, inputText, setImageMap, setInputText, setShowImageModal],
+    [imageDesc, uploadAndInsertImage, setShowImageModal],
   );
 
   const handleOnlineImage = useCallback(() => {
-    if (!imageUrl.trim()) return;
+    const url = imageUrl.trim();
+    if (!url) return;
 
-    const textarea = inputRef.current;
-    if (!textarea) return;
-
-    const scrollTop = textarea.scrollTop;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
     const desc = imageDesc || "图片";
-    const imageMarkdown = `![${desc}](${imageUrl.trim()})`;
-    const newText = inputText.substring(0, start) + imageMarkdown + inputText.substring(end);
-
-    setInputText(newText);
-
-    setTimeout(() => {
-      textarea.focus();
-      textarea.scrollTop = scrollTop;
-      textarea.setSelectionRange(start + imageMarkdown.length, start + imageMarkdown.length);
-    }, 0);
-
+    insertImageAtCursor(`![${desc}](${url})`);
     setShowImageModal(false);
-  }, [imageDesc, imageUrl, inputRef, inputText, setInputText, setShowImageModal]);
+  }, [imageDesc, imageUrl, insertImageAtCursor, setShowImageModal]);
 
   const handlePaste = useCallback(
-    async (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    async (e: ClipboardEvent<HTMLTextAreaElement>) => {
       const items = e.clipboardData?.items;
       if (!items) return;
 
@@ -278,44 +262,12 @@ export function useMarkdownTools({
           const file = item.getAsFile();
           if (!file) continue;
 
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            const base64 = event.target?.result as string;
-            const imageId = `img-${++imageCounterRef.current}`;
-
-            setImageMap((prev) => {
-              const newMap = new Map(prev);
-              newMap.set(imageId, base64);
-              return newMap;
-            });
-
-            const textarea = inputRef.current;
-            if (textarea) {
-              const scrollTop = textarea.scrollTop;
-              const start = textarea.selectionStart;
-              const end = textarea.selectionEnd;
-              const imageMarkdown = `\n![图片](#${imageId})\n`;
-
-              setInputText(
-                (prev) => prev.substring(0, start) + imageMarkdown + prev.substring(end),
-              );
-
-              setTimeout(() => {
-                textarea.focus();
-                textarea.scrollTop = scrollTop;
-                textarea.setSelectionRange(
-                  start + imageMarkdown.length,
-                  start + imageMarkdown.length,
-                );
-              }, 0);
-            }
-          };
-          reader.readAsDataURL(file);
+          await uploadAndInsertImage(file, "图片");
           break;
         }
       }
     },
-    [imageCounterRef, inputRef, setImageMap, setInputText],
+    [uploadAndInsertImage],
   );
 
   return {
