@@ -86,7 +86,7 @@ export function MarkdownEditorPane({
 
   return (
     <div
-      className={`flex-[1.2] flex-col neo-panel overflow-hidden ${activeTab === "input" ? "flex" : "hidden md:flex"}`}
+      className={`flex-[1.2] flex-col neo-panel overflow-hidden ${activeTab === "input" ? "flex" : "hidden lg:flex"}`}
     >
       <div className="neo-strip px-3 py-2.5 sm:px-4 sm:py-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3 shrink-0 min-w-0">
         <span className="text-xs sm:text-sm font-black text-(--neo-on-header) flex items-center gap-2 uppercase shrink-0 min-w-0">
@@ -125,8 +125,8 @@ export function MarkdownEditorPane({
         </div>
       </div>
 
-      <div className="bg-(--neo-surface) px-3 py-2 border-b-[3px] border-(--neo-ink) flex flex-wrap items-center gap-x-2 gap-y-2 shrink-0 overflow-x-auto custom-scrollbar no-scrollbar">
-        <div className="flex items-center gap-1 md:hidden">
+      <div className="relative bg-(--neo-surface) px-3 py-2 border-b-[3px] border-(--neo-ink) flex flex-wrap items-center gap-x-2 gap-y-2 shrink-0">
+        <div className="flex flex-wrap items-center gap-1 lg:hidden">
           <button
             onClick={() => insertHeading(1)}
             className="neo-toolbar-button p-2 text-sm font-bold"
@@ -169,7 +169,7 @@ export function MarkdownEditorPane({
           >
             <Quote className="w-4 h-4" />
           </button>
-          <div ref={advancedToolsRef} className="relative">
+          <div ref={advancedToolsRef}>
             <button
               type="button"
               onClick={() => setShowAdvancedTools((prev) => !prev)}
@@ -180,7 +180,7 @@ export function MarkdownEditorPane({
               <MoreVertical className="w-4 h-4" />
             </button>
             {showAdvancedTools && (
-              <div className="absolute right-0 top-10 z-30 w-56 neo-modal p-2 grid grid-cols-2 gap-1">
+              <div className="absolute right-2 top-full z-30 w-56 max-w-[calc(100vw-24px)] neo-modal p-2 grid grid-cols-2 gap-1">
                 <button type="button" onClick={() => { insertHeading(3); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 text-xs">H3</button>
                 <button type="button" onClick={() => { insertMarkdown("*", "*", "斜体"); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 italic font-serif">I</button>
                 <button type="button" onClick={() => { insertMarkdown("~~", "~~", "删除线"); setShowAdvancedTools(false); }} className="neo-toolbar-button px-2 py-2 line-through">S</button>
@@ -199,7 +199,7 @@ export function MarkdownEditorPane({
           </div>
         </div>
 
-        <div className="hidden md:flex md:flex-wrap md:w-full md:items-center md:gap-x-2 md:gap-y-2">
+        <div className="hidden lg:flex lg:flex-wrap lg:w-full lg:items-center lg:gap-x-2 lg:gap-y-2">
         {/* Style Group */}
         <div className="flex items-center gap-1">
           <button

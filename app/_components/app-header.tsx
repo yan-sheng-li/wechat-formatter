@@ -61,7 +61,7 @@ export function AppHeader({
           </h1>
         </Link>
 
-        <div className="min-w-0 overflow-x-auto scrollbar-hide py-1">
+        <div className="min-w-0 py-1">
           <div className="flex items-center justify-end gap-2 sm:gap-3">
             <button
               onClick={toggleDarkMode}
@@ -93,8 +93,8 @@ export function AppHeader({
               disabled={!hasContent}
             >
               <Send className="w-4 h-4" />
-              <span className="md:hidden">同步</span>
-              <span className="hidden md:inline">同步公众号</span>
+              <span className="lg:hidden">同步</span>
+              <span className="hidden lg:inline">同步公众号</span>
             </button>
             <button
               onClick={onCopy}
@@ -102,8 +102,8 @@ export function AppHeader({
               disabled={!hasContent}
             >
               <Copy className="w-5 h-5" />
-              <span className="md:hidden">复制</span>
-              <span className="hidden md:inline">一键复制</span>
+              <span className="lg:hidden">复制</span>
+              <span className="hidden lg:inline">一键复制</span>
             </button>
             <div ref={moreMenuRef} className="relative sm:hidden shrink-0">
               <button
@@ -154,7 +154,7 @@ export function AppHeader({
         </div>
       </div>
 
-      <div className="flex gap-2 bg-(--neo-sub-header) border-t-[3px] border-(--neo-ink) p-2 md:hidden">
+      <div className="flex gap-2 bg-(--neo-sub-header) border-t-[3px] border-(--neo-ink) p-2 lg:hidden">
         <button
           onClick={() => setActiveTab("input")}
           className={`flex-1 py-2 text-sm font-black text-center ${activeTab === "input" ? "neo-tab neo-tab-active" : "neo-tab"}`}

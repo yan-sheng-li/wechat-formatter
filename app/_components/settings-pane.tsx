@@ -156,7 +156,7 @@ export function SettingsPane({
 
   return (
     <div
-      className={`w-full md:w-64 lg:w-[320px] flex-col gap-4 shrink-0 h-full overflow-hidden pb-24 md:pb-0 ${activeTab === "settings" ? "flex" : "hidden md:flex"}`}
+      className={`w-full lg:w-[320px] flex-col gap-4 shrink-0 h-full overflow-hidden pb-24 lg:pb-0 ${activeTab === "settings" ? "flex" : "hidden lg:flex"}`}
     >
       <div
         className={`neo-panel overflow-hidden flex flex-col shrink-0 ${isTemplatesOpen ? "flex-1 min-h-0" : ""}`}
@@ -500,7 +500,7 @@ export function SettingsPane({
         )}
       </div>
 
-      <div className="hidden md:block neo-panel p-4 shrink-0">
+      <div className="hidden lg:block neo-panel p-4 shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ArrowLeftRight className="w-4 h-4 text-(--neo-ink)" />

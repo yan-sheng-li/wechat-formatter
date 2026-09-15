@@ -183,7 +183,7 @@ export default function Home() {
         />
 
         <div className="flex-1 max-w-[1600px] w-full mx-auto p-3 sm:p-5 overflow-hidden">
-          <div className="flex flex-col md:flex-row gap-4 lg:gap-6 h-full">
+          <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-full">
             <MarkdownEditorPane
               activeTab={activeTab}
               inputText={inputText}

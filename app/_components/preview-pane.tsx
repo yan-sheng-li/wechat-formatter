@@ -52,13 +52,13 @@ export function PreviewPane({
     <div
       ref={previewRef}
       onScroll={onPreviewScroll}
-      className={`flex-[1.2] flex-col overflow-y-auto ${activeTab === "preview" ? "flex" : "hidden md:flex"} custom-scrollbar`}
+      className={`flex-[1.2] flex-col overflow-y-auto ${activeTab === "preview" ? "flex" : "hidden lg:flex"} custom-scrollbar`}
     >
-      <div className="md:flex-1 neo-panel-strong flex justify-center py-6 px-4 md:py-8">
-        <div className="md:hidden w-full">
+      <div className="lg:flex-1 neo-panel-strong flex justify-center py-6 px-4 lg:py-8">
+        <div className="lg:hidden w-full">
           <ArticleHtml outputHtml={outputHtml} />
         </div>
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <DesktopPhonePreview outputHtml={outputHtml} />
         </div>
       </div>
