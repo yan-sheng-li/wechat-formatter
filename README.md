@@ -92,8 +92,8 @@ git clone https://github.com/mspringjade/wechat-formatter.git
 # 进入项目目录
 cd wechat-formatter
 
-# 安装依赖
-npm install
+# 安装依赖（仓库以 pnpm 为准，唯一 lockfile 是 pnpm-lock.yaml）
+pnpm install
 
 # 启动开发服务器
 npm run dev

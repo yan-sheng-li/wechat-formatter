@@ -128,13 +128,13 @@ wechat-formatter/
 ## 开发环境
 
 - Node.js 20.9.0 或更高版本（Next.js 16.2.0 的运行时要求）
-- npm 或 pnpm
+- pnpm 10（版本锁定在 package.json 的 packageManager 字段；仓库唯一 lockfile 为 pnpm-lock.yaml，不要提交 package-lock.json）
 
 ## 开发命令
 
 ```bash
 # 安装依赖
-npm install
+pnpm install
 
 # 启动开发服务器
 npm run dev
