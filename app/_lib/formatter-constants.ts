@@ -39,6 +39,8 @@ function loveTech() {
 ## 第 4 步：开始使用吧
 无论是哪种风格，都可以通过 TypeZen 的智能算法整理结构、模板切换和细节微调来突出**重点内容**，让读者一眼抓取核心信息。赶快来试试这 72 套排版模板，让你的文章在朋友圈**脱颖而出**！`;
 
+export const draftStorageKey = "wechat-formatter-editor-draft";
+
 export const aiStorageKeys = {
   provider: "wechat-formatter-ai-provider",
   baseUrl: "wechat-formatter-ai-base-url",

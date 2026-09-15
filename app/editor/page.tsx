@@ -16,6 +16,7 @@ import { useAiFormat } from "../_hooks/use-ai-format";
 import { useAiSettings } from "../_hooks/use-ai-settings";
 import { useClipboardCopy } from "../_hooks/use-clipboard-copy";
 import { useMarkdownTools } from "../_hooks/use-markdown-tools";
+import { useDraft } from "../_hooks/use-draft";
 import { useScrollSync } from "../_hooks/use-scroll-sync";
 import { useTheme } from "../_hooks/use-theme";
 import { useToast } from "../_hooks/use-toast";
@@ -42,7 +43,8 @@ const DEFAULT_FORMAT_TWEAKS: FormatTweaks = {
 };
 
 export default function Home() {
-  const [inputText, setInputText] = useState(sampleText);
+  const { toast, showToast } = useToast();
+  const [inputText, setInputText] = useDraft(sampleText, showToast);
   const [activeTab, setActiveTab] = useState<ActiveTab>("input");
   const [currentTemplateId, setCurrentTemplateId] = useState<string>("neo-brutalism-0");
   const [currentCategory, setCurrentCategory] = useState<string>("neo-brutalism");
@@ -57,8 +59,6 @@ export default function Home() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageCounterRef = useRef(0);
-
-  const { toast, showToast } = useToast();
   const { isDarkMode, toggleDarkMode } = useTheme();
   const aiSettings = useAiSettings(showToast);
   const wechatSettings = useWeChatSettings();
