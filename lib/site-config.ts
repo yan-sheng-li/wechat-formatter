@@ -12,7 +12,7 @@ export const SITE_TITLE_DEFAULT = "TypeZen | 微信公众号 Markdown 智能排�
  * <meta name="description">：严格控制在 40-50 字符左右
  */
 export const SITE_DESCRIPTION =
-  "TypeZen: 极简 Markdown 转微信排版。84 套模板、AI 一键优化、微信自动同步、一键复制发布，完全免费开源。";
+  "TypeZen: 极简 Markdown 转微信排版。96 套模板、AI 一键优化、微信自动同步、一键复制发布，完全免费开源。";
 
 /** Open Graph site_name */
 export const SITE_OG_SITE_NAME = "TypeZen";
@@ -22,7 +22,7 @@ export const EDITOR_TITLE = "TypeZen 编辑器 | 实时 Markdown 转微信排版
 
 /** 编辑器页面专属 Description */
 export const EDITOR_DESCRIPTION =
-  "TypeZen 在线编辑器：AI 智能排版，84 套精美模板，本地安全，即开即用。";
+  "TypeZen 在线编辑器：AI 智能排版，96 套精美模板，本地安全，即开即用。";
 
 /** 关键词 */
 export const SITE_KEYWORDS =

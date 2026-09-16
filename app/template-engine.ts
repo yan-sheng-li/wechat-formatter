@@ -109,6 +109,20 @@ const colorPalettes = {
     "#6b4f3a", // 茶褐
     "#2b2b2b", // 墨
   ],
+  dataReport: [
+    "#2563eb", // 靛蓝
+    "#0d9488", // 青碧
+    "#059669", // 翠绿
+    "#65a30d", // 橄榄
+    "#ca8a04", // 金
+    "#ea580c", // 橙
+    "#dc2626", // 正红
+    "#db2777", // 瑰红
+    "#9333ea", // 紫
+    "#4f46e5", // 焰青
+    "#0891b2", // 湖蓝
+    "#475569", // 石板
+  ],
   tech: [
     "#2563eb",
     "#0ea5e9",
@@ -161,6 +175,7 @@ const categoriesList = [
   { id: "literary", name: "文艺风" },
   { id: "chinese-classic", name: "国风" },
   { id: "tech", name: "科技风" },
+  { id: "data-report", name: "数据资讯风" },
   { id: "festive", name: "节庆风" },
 ];
 
@@ -388,6 +403,39 @@ function getStylesByCategory(category: string, color: string) {
         delStyle: "text-decoration: line-through; opacity: 0.5;",
         defaultH2Layout: "left" as H1LayoutType,
       };
+    case "data-report":
+      return {
+        themeColor: color,
+        backgroundColor: "#ffffff",
+        baseStyle: {
+          color: "#334155",
+          fontFamily: "system-ui, -apple-system, sans-serif",
+        },
+        containerStyle: "padding: 18px 16px; background-color: #ffffff;",
+        h1Style: `font-size: 1.5em; font-weight: 900; text-align: left; margin: 28px 0 20px 0; color: #ffffff; background-color: ${color}; padding: 12px 16px; border-radius: 2px; letter-spacing: 1px; line-height: 1.4; display: block;`,
+        h2Style: `font-size: 1.25em; font-weight: 800; margin: 26px 0 18px 0; color: #ffffff; background-color: ${color}; padding: 10px 14px; border-radius: 2px; display: block; line-height: 1.4; letter-spacing: 0.5px;`,
+        h3Style: `font-size: 1.1em; font-weight: 700; margin: 20px 0 14px 0; color: ${color}; padding-left: 10px; border-left: 4px solid ${color}; line-height: 1.4; display: block;`,
+        pStyle: "margin: 0 0 16px 0; line-height: 1.7; color: #475569;",
+        blockquoteStyle: `border: 1px solid ${hexToRgba(color, 0.3)}; margin: 20px 0; padding: 14px 16px; color: #334155; background-color: ${hexToRgba(color, 0.05)}; border-radius: 4px; font-size: 0.97em;`,
+        blockquoteInnerBefore: ``,
+        blockquoteInnerAfter: ``,
+        listStyle: "margin: 0 0 16px 0; padding: 0; list-style-type: none;",
+        listItemStyle: "margin: 0 0 10px 0; line-height: 1.6; font-weight: 500;",
+        listIcon: `<section style="display: inline-block; width: 8px; height: 8px; background-color: ${color}; border-radius: 50%; vertical-align: middle; box-sizing: border-box; overflow: hidden;"><br/></section>`,
+        strongStyle: `font-weight: 700; color: ${color};`,
+        emStyle: `font-style: normal; color: ${hexToRgba(color, 0.8)}; border-bottom: 1px solid ${color};`,
+        codeContainerStyle: `margin: 20px 0; border: 1px solid ${hexToRgba(color, 0.2)}; border-radius: 4px; overflow: hidden; background-color: ${hexToRgba(color, 0.03)};`,
+        codeHeaderStyle: `background-color: ${hexToRgba(color, 0.1)}; padding: 8px 12px; font-size: 0; line-height: 1; border-bottom: 1px solid ${hexToRgba(color, 0.2)};`,
+        codeBlockStyle: `margin: 0; padding: 14px; overflow-x: auto; color: #334155; font-size: 13px; font-family: monospace; line-height: 1.6; white-space: pre-wrap; word-break: break-all;`,
+        imgStyle: `max-width: 100%; border: 1px solid ${hexToRgba(color, 0.2)}; border-radius: 4px; display: block; margin: 20px auto;`,
+        hrStyle: `border: none; border-top: 2px solid ${hexToRgba(color, 0.2)}; margin: 28px 0;`,
+        linkStyle: `color: ${color}; font-weight: 600; text-decoration: none; border-bottom: 2px solid ${color};`,
+        tableStyle: `width: 100%; max-width: 100%; border-collapse: collapse; margin: 20px 0; border: 1px solid ${hexToRgba(color, 0.2)}; font-size: 0.95em; table-layout: fixed; word-wrap: break-word;`,
+        thStyle: `border: 1px solid ${hexToRgba(color, 0.3)}; padding: 12px 10px; background-color: ${color}; color: #ffffff; font-weight: 700; text-align: left; margin: 0;`,
+        tdStyle: `border: 1px solid ${hexToRgba(color, 0.15)}; padding: 12px 10px; color: #334155; margin: 0; word-wrap: break-word; word-break: break-all; background-color: #f8fafc;`,
+        delStyle: "text-decoration: line-through; opacity: 0.5;",
+        defaultH2Layout: "left" as H1LayoutType,
+      };
     case "tech":
       return {
         themeColor: color,
@@ -509,6 +557,17 @@ function generateTemplates(): TemplateConfig[] {
       desc: "宣纸底色与印章式标记，适合文化、国学与人文长文",
       category: "chinese-classic",
       ...getStylesByCategory("chinese-classic", color),
+    });
+  });
+
+  // 4.6 数据资讯风 (Data Report) - 刊头、章节栏、图表式列表
+  colorPalettes.dataReport.forEach((color, i) => {
+    result.push({
+      id: `data-report-${i}`,
+      name: names[i],
+      desc: "刊头式标题与数据表格，适合行业分析与干货复盘",
+      category: "data-report",
+      ...getStylesByCategory("data-report", color),
     });
   });
 
@@ -671,25 +730,11 @@ export function renderArticle(
       }
     }
 
-    const isInline = cleanStyle.includes("display: inline-block");
-
-    // Use robust nested section structure for WeChat to avoid text displacement
-    if (isInline) {
-      return `<section style="margin: ${margin}; text-align: ${textAlign};">
-        <section style="${cleanStyle} display: inline-block; text-align: left;">
-          <section style="margin: 0; padding: 0; font-size: 1em; font-weight: inherit; line-height: 1.4; background: none; border: none; color: inherit;">
-            ${textHtml}
-          </section>
-        </section>
-      </section>`;
-    }
-
+    // Nested section keeps the heading's background/border while letting WeChat's
+    // UA styles on <h*> tags stop displacing text. No inner wrapper with
+    // "background: none" — that used to strip the colored h1/h2 backgrounds.
     return `<section style="margin: ${margin}; text-align: ${textAlign};">
-      <section style="${cleanStyle}">
-        <section style="margin: 0; padding: 0; font-size: 1em; font-weight: inherit; line-height: 1.4; background: none; border: none; color: inherit;">
-          ${textHtml}
-        </section>
-      </section>
+      <section style="${cleanStyle}">${textHtml}</section>
     </section>`;
   };
 

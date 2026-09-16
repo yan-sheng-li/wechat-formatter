@@ -193,7 +193,14 @@ export function SettingsPane({
                 {groupedTemplates.map((cat) => (
                   <button
                     key={cat.id}
-                    onClick={() => setCurrentCategory(cat.id)}
+                    onClick={() => {
+                      setCurrentCategory(cat.id);
+                      if (cat.templates.length > 0) {
+                        const first = cat.templates[0];
+                        setCurrentTemplateId(first.id);
+                        updateFormatTweaks("themeColor", first.themeColor);
+                      }
+                    }}
                     className={`whitespace-nowrap px-3 py-1.5 text-xs font-black ${currentCategory === cat.id ? "neo-tab neo-tab-active" : "neo-tab"}`}
                   >
                     {cat.name}
