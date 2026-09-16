@@ -56,11 +56,6 @@ export default function Home() {
   const { syncScroll, setSyncScroll, previewRef, handleInputScroll, handlePreviewScroll } =
     useScrollSync(inputRef);
 
-  const articleTitle = useMemo(() => {
-    const match = inputText.match(/^#\s+(.+)$/m);
-    return match ? match[1].trim() : "";
-  }, [inputText]);
-
   const markdownTools = useMarkdownTools({
     inputText,
     setInputText,

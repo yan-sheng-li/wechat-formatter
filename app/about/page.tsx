@@ -25,7 +25,7 @@ export default function AboutPage() {
         <p className="text-base font-bold text-(--neo-muted) leading-relaxed">
           {SITE_BRAND} 是一款专为微信公众号打造的 {SITE_PRODUCT_NAME}。
           我们相信，创作者的时间应该花在内容本身，而不是反复调整字号、间距与配色。 通过 {SITE_BRAND}
-          ，你只需要专注于用 Markdown 写作，剩下的排版工作交给 AI 与 72 套精选模板即可完成。
+          ，你只需要专注于用 Markdown 写作，剩下的排版工作交给 AI 与 84 套精选模板即可完成。
         </p>
       </section>
 
@@ -34,7 +34,7 @@ export default function AboutPage() {
         <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-base font-bold text-(--neo-muted)">
           <li className="flex items-start gap-2">
             <span className="text-(--neo-yellow)">▸</span>
-            <span>72 套多风格排版模板</span>
+            <span>84 套多风格排版模板</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-(--neo-yellow)">▸</span>

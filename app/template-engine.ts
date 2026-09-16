@@ -95,6 +95,20 @@ const colorPalettes = {
     "#db2777",
     "#7c2d12",
   ],
+  chineseClassic: [
+    "#9d2933", // 绛红
+    "#8c4351", // 胭脂紫
+    "#a0522d", // 赭石
+    "#9c7a2e", // 秋香
+    "#5b7a3a", // 竹青
+    "#2f6b4f", // 松绿
+    "#2e5f6d", // 青碧
+    "#1e4a6d", // 靛青
+    "#3c5a99", // 群青
+    "#5b3a54", // 紫檀
+    "#6b4f3a", // 茶褐
+    "#2b2b2b", // 墨
+  ],
   tech: [
     "#2563eb",
     "#0ea5e9",
@@ -145,6 +159,7 @@ const categoriesList = [
   { id: "minimalist", name: "极简风" },
   { id: "business", name: "商务风" },
   { id: "literary", name: "文艺风" },
+  { id: "chinese-classic", name: "国风" },
   { id: "tech", name: "科技风" },
   { id: "festive", name: "节庆风" },
 ];
@@ -311,7 +326,7 @@ function getStylesByCategory(category: string, color: string) {
         backgroundColor: "#fdfcfb",
         baseStyle: {
           color: "#4b5563",
-          fontFamily: '"Noto Serif SC", serif, system-ui',
+          fontFamily: "'Noto Serif SC', serif, system-ui",
         },
         containerStyle: `padding: 24px 16px; background-color: #fdfcfb;`,
         h1Style: `font-size: 1.35em; font-weight: normal; text-align: center; margin: 30px 0; color: ${color}; letter-spacing: 4px; line-height: 1.4;`,
@@ -340,13 +355,46 @@ function getStylesByCategory(category: string, color: string) {
         delStyle: "text-decoration: line-through; opacity: 0.5;",
         defaultH2Layout: "center" as H1LayoutType,
       };
+    case "chinese-classic":
+      return {
+        themeColor: color,
+        backgroundColor: "#faf7f2",
+        baseStyle: {
+          color: "#3d3632",
+          fontFamily: "'Songti SC', 'SimSun', 'Noto Serif SC', serif, system-ui",
+        },
+        containerStyle: "padding: 24px 18px; background-color: #faf7f2;",
+        h1Style: `font-size: 1.45em; font-weight: 600; text-align: center; margin: 30px 0; color: ${color}; letter-spacing: 6px; line-height: 1.5; border-top: 1px solid ${hexToRgba(color, 0.35)}; border-bottom: 3px double ${hexToRgba(color, 0.35)}; padding: 12px 0; display: block;`,
+        h2Style: `font-size: 1.2em; font-weight: 700; margin: 28px 0 18px; color: #38312c; background-color: ${hexToRgba(color, 0.06)}; border-left: 10px solid ${color}; padding: 7px 14px; letter-spacing: 2px; line-height: 1.5; display: block;`,
+        h3Style: `font-size: 1.05em; font-weight: 600; margin: 22px 0 14px; color: ${color}; letter-spacing: 1px; line-height: 1.5; border-bottom: 1px dotted ${hexToRgba(color, 0.45)}; padding-bottom: 5px; display: inline-block;`,
+        pStyle: "margin: 0 0 20px 0; line-height: 2.0; letter-spacing: 0.5px;",
+        blockquoteStyle: `margin: 30px 0; padding: 18px 16px; color: #4a423c; text-align: center; background-color: ${hexToRgba(color, 0.045)}; border-top: 1px solid ${hexToRgba(color, 0.35)}; border-bottom: 1px solid ${hexToRgba(color, 0.35)}; font-size: 0.97em; letter-spacing: 0.5px;`,
+        blockquoteInnerBefore: `<span style="color: ${color}; font-weight: 700;">「</span>`,
+        blockquoteInnerAfter: `<span style="color: ${color}; font-weight: 700;">」</span>`,
+        listStyle: "margin: 0 0 20px 0; padding: 0; list-style-type: none;",
+        listItemStyle: "margin: 0 0 12px 0; line-height: 1.9;",
+        listIcon: `<section style="display: inline-block; width: 2px; height: 13px; background-color: ${color}; vertical-align: middle; box-sizing: border-box; overflow: hidden;"><br/></section>`,
+        strongStyle: `font-weight: 700; color: ${color};`,
+        emStyle: `font-style: normal; color: ${hexToRgba(color, 0.85)}; border-bottom: 1px solid ${hexToRgba(color, 0.4)};`,
+        codeContainerStyle: `margin: 24px 0; border: 1px solid ${hexToRgba(color, 0.22)}; border-radius: 2px; overflow: hidden; background-color: #f4efe6;`,
+        codeHeaderStyle: `background-color: #ede4d6; padding: 8px 12px; font-size: 0; line-height: 1; border-bottom: 1px solid ${hexToRgba(color, 0.22)};`,
+        codeBlockStyle: `margin: 0; padding: 16px; overflow-x: auto; color: #4a3f35; font-size: 13px; font-family: monospace; line-height: 1.7; white-space: pre-wrap; word-break: break-all;`,
+        imgStyle: `max-width: 100%; padding: 6px; background-color: #ffffff; border: 1px solid ${hexToRgba(color, 0.2)}; box-shadow: 0 3px 12px rgba(0,0,0,0.05); display: block; margin: 24px auto; box-sizing: border-box;`,
+        hrStyle: `border: none; border-top: 1px solid ${hexToRgba(color, 0.35)}; border-bottom: 1px solid ${hexToRgba(color, 0.35)}; height: 3px; width: 40%; margin: 36px auto;`,
+        linkStyle: `color: ${color}; text-decoration: none; border-bottom: 1px solid ${hexToRgba(color, 0.4)};`,
+        tableStyle: `width: 100%; max-width: 100%; border-collapse: collapse; margin: 24px 0; border: 1px solid ${hexToRgba(color, 0.3)}; font-size: 0.95em; table-layout: fixed; word-wrap: break-word;`,
+        thStyle: `border: 1px solid ${hexToRgba(color, 0.3)}; padding: 12px 10px; background-color: #f2ece2; color: #38312c; font-weight: 700; letter-spacing: 1px; text-align: left; margin: 0;`,
+        tdStyle: `border: 1px solid ${hexToRgba(color, 0.18)}; padding: 12px 10px; color: #57504a; margin: 0; word-wrap: break-word; word-break: break-all; background-color: #fdfbf7;`,
+        delStyle: "text-decoration: line-through; opacity: 0.5;",
+        defaultH2Layout: "left" as H1LayoutType,
+      };
     case "tech":
       return {
         themeColor: color,
         backgroundColor: "#0f172a",
         baseStyle: {
           color: "#e5e7eb",
-          fontFamily: '"Space Grotesk", sans-serif',
+          fontFamily: "'Space Grotesk', sans-serif",
         },
         containerStyle: `padding: 20px; background-color: #0f172a;`,
         h1Style: `font-size: 1.6em; font-weight: bold; text-align: left; margin: 20px 0 32px 0; color: ${color === "#10b981" ? "#3b82f6" : "#10b981"}; text-transform: uppercase; letter-spacing: 2px; line-height: 1.4; border-bottom: 2px solid ${hexToRgba(color, 0.314)}; padding-bottom: 12px;`,
@@ -450,6 +498,17 @@ function generateTemplates(): TemplateConfig[] {
       desc: "打破常规的终端 /> 标识设计",
       category: "tech",
       ...getStylesByCategory("tech", color),
+    });
+  });
+
+  // 4.5 国风 (Chinese Classic) - 宣纸、印章、竖线
+  colorPalettes.chineseClassic.forEach((color, i) => {
+    result.push({
+      id: `chinese-classic-${i}`,
+      name: names[i],
+      desc: "宣纸底色与印章式标记，适合文化、国学与人文长文",
+      category: "chinese-classic",
+      ...getStylesByCategory("chinese-classic", color),
     });
   });
 

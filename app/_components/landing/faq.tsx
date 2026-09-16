@@ -3,7 +3,7 @@ import { Minus, Plus } from "lucide-react";
 const faqs = [
   {
     q: "TypeZen 真的完全免费吗？",
-    a: "是的，TypeZen 核心编辑、72 套模板、AI 排版（BYO Key）和一键复制功能完全免费，永久保留，并且完全开源。",
+    a: "是的，TypeZen 核心编辑、84 套模板、AI 排版（BYO Key）和一键复制功能完全免费，永久保留，并且完全开源。",
   },
   {
     q: "AI 排版功能是如何运作的？",

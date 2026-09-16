@@ -10,7 +10,7 @@ const features = [
   },
   {
     icon: <Palette className="w-8 h-8" />,
-    title: "72 套精美排版模板",
+    title: "84 套精美排版模板",
     description:
       "涵盖 Neo-Brutalism、极简、商务、文艺等 6 大核心风格。支持字体大小、行高、段间距、主题色等 10+ 项细节实时微调。",
     color: "var(--neo-yellow)",
